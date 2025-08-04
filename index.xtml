@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HostelHub - Complete Hostel Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8f9fa;
+            color: #212121;
+            overflow-x: hidden;
+        }
+        
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .status-bar {
+            background: #2e7d32;
+            height: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .app-bar {
+            background: #2e7d32;
+            color: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .app-title {
+            font-size: 20px;
+            font-weight: 500;
+        }
+        
+        .user-type-toggle {
+            display: flex;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 2px;
+        }
+        
+        .toggle-btn {
+            padding: 6px 12px;
+            border-radius: 18px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            background: transparent;
+            color: white;
+        }
+        
+        .toggle-btn.active {
+            background: white;
+            color: #2e7d32;
+        }
+        
+        .profile-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 12px;
+        }
+        
+        .search-section {
+            background: #2e7d32;
+            padding: 0 16px 20px;
+            color: white;
+        }
+        
+        .search-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            color: #212121;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .search-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .search-field {
+            flex: 1;
+        }
+        
+        .search-field label {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+        
+        .search-field input, .search-field select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+        }
+        
+        .search-btn {
+            width: 100%;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .search-btn:hover {
+            background: #1b5e20;
+        }
+        
+        .content {
+            padding: 20px 16px;
+            padding-bottom: 80px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #212121;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .add-btn {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .hostel-card {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .hostel-card:active {
+            transform: scale(0.98);
+        }
+        
+        .hostel-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+            position: relative;
+        }
+        
+        .rating-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .favorite-btn {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .favorite-btn.active {
+            color: #ff4444;
+        }
+        
+        .hostel-info {
+            padding: 16px;
+        }
+        
+        .hostel-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #212121;
+        }
+        
+        .hostel-location {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        
+        .hostel-features {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .feature-tag {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .hostel-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2e7d32;
+        }
+        
+        .price-unit {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .book-btn {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .filter-chips {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+        
+        .filter-chip {
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .filter-chip.active {
+            background: #2e7d32;
+            color: white;
+            border-color: #2e7d32;
+        }
+        
+        .owner-dashboard {
+            display: none;
+        }
+        
+        .owner-dashboard.active {
+            display: block;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .inquiry-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #ff9800;
+        }
+        
+        .inquiry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .inquiry-name {
+            font-weight: 600;
+            color: #212121;
+        }
+        
+        .inquiry-time {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .inquiry-message {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+        
+        .inquiry-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-small {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .btn-reply {
+            background: #2e7d32;
+            color: white;
+        }
+        
+        .btn-call {
+            background: #1976d2;
+            color: white;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 414px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            height: 64px;
+        }
+        
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #757575;
+        }
+        
+        .nav-item.active {
+            color: #2e7d32;
+        }
+        
+        .nav-item:active {
+            background: rgba(46, 125, 50, 0.1);
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        .nav-label {
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            width: 90%;
+            max-width: 350px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #212121;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .btn-secondary {
+            flex: 1;
+            background: #f5f5f5;
+            color: #666;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            flex: 1;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .login-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        
+        .login-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .login-btn:hover {
+            background: #f5f5f5;
+        }
+        
+        .review-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .reviewer-name {
+            font-weight: 600;
+            color: #212121;
+        }
+        
+        .review-rating {
+            color: #ff9800;
+        }
+        
+        .review-text {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        @media (max-width: 414px) {
+            .app-container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span>9:41</span>
+            <span>📶 📶 🔋</span>
+        </div>
+        
+        <!-- App Bar -->
+        <div class="app-bar">
+            <div class="app-title">HostelHub</div>
+            <div style="display: flex; align-items: center;">
+                <div class="user-type-toggle">
+                    <button class="toggle-btn active" onclick="switchUserType('tenant')">Tenant</button>
+                    <button class="toggle-btn" onclick="switchUserType('owner')">Owner</button>
+                </div>
+                <div class="profile-icon" onclick="showProfile()">👤</div>
+            </div>
+        </div>
+        
+        <!-- Tenant View -->
+        <div id="tenantView">
+            <!-- Search Section -->
+            <div class="search-section">
+                <div class="search-card">
+                    <div class="search-row">
+                        <div class="search-field">
+                            <label>Destination</label>
+                            <input type="text" placeholder="Where are you going?" id="destination">
+                        </div>
+                    </div>
+                    <div class="search-row">
+                        <div class="search-field">
+                            <label>Check-in</label>
+                            <input type="date" id="checkin">
+                        </div>
+                        <div class="search-field">
+                            <label>Check-out</label>
+                            <input type="date" id="checkout">
+                        </div>
+                    </div>
+                    <div class="search-row">
+                        <div class="search-field">
+                            <label>Budget Range</label>
+                            <select id="budget">
+                                <option>Any Budget</option>
+                                <option>Under ₹5,000</option>
+                                <option>₹5,000 - ₹10,000</option>
+                                <option>₹10,000 - ₹15,000</option>
+                                <option>Above ₹15,000</option>
+                            </select>
+                        </div>
+                        <div class="search-field">
+                            <label>Room Type</label>
+                            <select id="roomType">
+                                <option>Any</option>
+                                <option>Single</option>
+                                <option>Double Sharing</option>
+                                <option>Triple Sharing</option>
+                                <option>Dormitory</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="search-btn" onclick="searchHostels()">🔍 Search Hostels</button>
+                </div>
+            </div>
+            
+            <!-- Content -->
+            <div class="content">
+                <!-- Filter Chips -->
+                <div class="filter-chips">
+                    <div class="filter-chip active" onclick="filterBy(this, 'all')">All</div>
+                    <div class="filter-chip" onclick="filterBy(this, 'wifi')">📶 WiFi</div>
+                    <div class="filter-chip" onclick="filterBy(this, 'food')">🍽️ Food</div>
+                    <div class="filter-chip" onclick="filterBy(this, 'ac')">❄️ AC</div>
+                    <div class="filter-chip" onclick="filterBy(this, 'girls')">👩 Girls Only</div>
+                    <div class="filter-chip" onclick="filterBy(this, 'boys')">👨 Boys Only</div>
+                </div>
+                
+                <div class="section-title">Popular Hostels Near You</div>
+                
+                <!-- Hostel Cards -->
+                <div class="hostel-card" onclick="showHostelDetails('Green Backpackers')">
+                    <div class="hostel-image">
+                        🏠
+                        <div class="rating-badge">⭐ 4.8 (124)</div>
+                        <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(this)">♡</button>
+                    </div>
+                    <div class="hostel-info">
+                        <div class="hostel-name">Green Backpackers</div>
+                        <div class="hostel-location" onclick="event.stopPropagation(); showOnMap('Green Backpackers')">📍 Koramangala, Bangalore</div>
+                        <div class="hostel-features">
+                            <span class="feature-tag">📶 WiFi</span>
+                            <span class="feature-tag">🍽️ Food</span>
+                            <span class="feature-tag">❄️ AC</span>
+                            <span class="feature-tag">🧺 Laundry</span>
+                        </div>
+                        <div class="hostel-price">
+                            <div>
+                                <span class="price">₹8,500</span>
+                                <span class="price-unit">/month</span>
+                            </div>
+                            <button class="book-btn" onclick="event.stopPropagation(); bookHostel('Green Backpackers')">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hostel-card" onclick="showHostelDetails('Urban Nomads')">
+                    <div class="hostel-image">
+                        🏢
+                        <div class="rating-badge">⭐ 4.6 (89)</div>
+                        <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(this)">♡</button>
+                    </div>
+                    <div class="hostel-info">
+                        <div class="hostel-name">Urban Nomads</div>
+                        <div class="hostel-location" onclick="event.stopPropagation(); showOnMap('Urban Nomads')">📍 HSR Layout, Bangalore</div>
+                        <div class="hostel-features">
+                            <span class="feature-tag">📶 WiFi</span>
+                            <span class="feature-tag">🏋️ Gym</span>
+                            <span class="feature-tag">🎮 Gaming</span>
+                            <span class="feature-tag">👨 Boys Only</span>
+                        </div>
+                        <div class="hostel-price">
+                            <div>
+                                <span class="price">₹12,000</span>
+                                <span class="price-unit">/month</span>
+                            </div>
+                            <button class="book-btn" onclick="event.stopPropagation(); bookHostel('Urban Nomads')">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hostel-card" onclick="showHostelDetails('Sunset Hostel')">
+                    <div class="hostel-image">
+                        🌅
+                        <div class="rating-badge">⭐ 4.9 (156)</div>
+                        <button class="favorite-btn active" onclick="event.stopPropagation(); toggleFavorite(this)">♥</button>
+                    </div>
+                    <div class="hostel-info">
+                        <div class="hostel-name">Sunset Hostel</div>
+                        <div class="hostel-location" onclick="event.stopPropagation(); showOnMap('Sunset Hostel')">📍 Indiranagar, Bangalore</div>
+                        <div class="hostel-features">
+                            <span class="feature-tag">📶 WiFi</span>
+                            <span class="feature-tag">🍽️ Food</span>
+                            <span class="feature-tag">🏠 Rooftop</span>
+                            <span class="feature-tag">👩 Girls Only</span>
+                        </div>
+                        <div class="hostel-price">
+                            <div>
+                                <span class="price">₹9,500</span>
+                                <span class="price-unit">/month</span>
+                            </div>
+                            <button class="book-btn" onclick="event.stopPropagation(); bookHostel('Sunset Hostel')">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Owner Dashboard -->
+        <div id="ownerView" class="owner-dashboard">
+            <div class="content">
+                <!-- Stats Dashboard -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Active Hostels</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">47</div>
+                        <div class="stat-label">Total Tenants</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">₹2.1L</div>
+                        <div class="stat-label">Monthly Revenue</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">94%</div>
+                        <div class="stat-label">Occupancy Rate</div>
+                    </div>
+                </div>
+                
+                <!-- My Hostels -->
+                <div class="section-title">
+                    My Hostels
+                    <button class="add-btn" onclick="addNewHostel()">+ Add Hostel</button>
+                </div>
+                
+                <div class="hostel-card" onclick="manageHostel('Green Backpackers')">
+                    <div class="hostel-image">
+                        🏠
+                        <div class="rating-badge">⭐ 4.8 (124)</div>
+                    </div>
+                    <div class="hostel-info">
+                        <div class="hostel-name">Green Backpackers</div>
+                        <div class="hostel-location">📍 Koramangala, Bangalore</div>
+                        <div class="hostel-features">
+                            <span class="feature-tag">18/20 Occupied</span>
+                            <span class="feature-tag">₹1.53L Revenue</span>
+                        </div>
+                        <div class="hostel-price">
+                            <div>
+                                <span class="price">₹8,500</span>
+                                <span class="price-unit">/month</span>
+                            </div>
+                            <button class="book-btn" onclick="event.stopPropagation(); editHostel('Green Backpackers')">Manage</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tenant Inquiries -->
+                <div class="section-title">Recent Inquiries</div>
+                
+                <div class="inquiry-card">
+                    <div class="inquiry-header">
+                        <div class="inquiry-name">Priya Sharma</div>
+                        <div class="inquiry-time">2 hours ago</div>
+                    </div>
+                    <div class="inquiry-message">
+                        "Hi, I'm interested in a single room at Green Backpackers. Is it available from next month? Also, do you provide meals?"
+                    </div>
+                    <div class="inquiry-actions">
+                        <button class="btn-small btn-reply" onclick="replyToInquiry('Priya Sharma')">💬 Reply</button>
+                        <button class="btn-small btn-call" onclick="callTenant('Priya Sharma')">📞 Call</button>
+                    </div>
+                </div>
+                
+                <div class="inquiry-card">
+                    <div class="inquiry-header">
+                        <div class="inquiry-name">Rahul Kumar</div>
+                        <div class="inquiry-time">5 hours ago</div>
+                    </div>
+                    <div class="inquiry-message">
+                        "Looking for accommodation near HSR Layout. Can I visit Urban Nomads tomorrow evening?"
+                    </div>
+                    <div class="inquiry-actions">
+                        <button class="btn-small btn-reply" onclick="replyToInquiry('Rahul Kumar')">💬 Reply</button>
+                        <button class="btn-small btn-call" onclick="callTenant('Rahul Kumar')">📞 Call</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="switchTab(this, 'search')">
+                <div class="nav-icon" id="nav-icon-1">🔍</div>
+                <div class="nav-label" id="nav-label-1">Search</div>
+            </div>
+            <div class="nav-item" onclick="switchTab(this, 'bookings')">
+                <div class="nav-icon" id="nav-icon-2">📋</div>
+                <div class="nav-label" id="nav-label-2">Bookings</div>
+            </div>
+            <div class="nav-item" onclick="switchTab(this, 'favorites')">
+                <div class="nav-icon" id="nav-icon-3">❤️</div>
+                <div class="nav-label" id="nav-label-3">Favorites</div>
+            </div>
+            <div class="nav-item" onclick="switchTab(this, 'chat')">
+                <div class="nav-icon" id="nav-icon-4">💬</div>
+                <div class="nav-label" id="nav-label-4">Chat</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-title">Welcome to HostelHub</div>
+            <div class="form-group">
+                <label>Email or Phone</label>
+                <input type="text" placeholder="Enter email or phone number">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" placeholder="Enter password">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn-primary" onclick="login()">Login</button>
+            </div>
+            <div class="login-options">
+                <div class="login-btn" onclick="loginWithGoogle()">
+                    🔍 Continue with Google
+                </div>
+                <div class="login-btn" onclick="loginWithOTP()">
+                    📱 Login with OTP
+                </div>
+                <div class="login-btn" onclick="showRegister()">
+                    ✨ Create New Account
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Booking Modal -->
+    <div class="modal" id="bookingModal">
+        <div class="modal-content">
+            <div class="modal-title">Book Your Stay</div>
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" placeholder="Enter your full name">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" placeholder="+91 98765 43210">
+            </div>
+            <div class="form-group">
+                <label>Move-in Date</label>
+                <input type="date">
+            </div>
+            <div class="form-group">
+                <label>Duration</label>
+                <select>
+                    <option>1 Month</option>
+                    <option>3 Months</option>
+                    <option>6 Months</option>
+                    <option>1 Year</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Special Requirements</label>
+                <textarea placeholder="Any special requirements?" rows="3"></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn-primary" onclick="confirmBooking()">Confirm Booking</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hostel Details Modal -->
+    <div class="modal" id="hostelDetailsModal">
+        <div class="modal-content">
+            <div class="modal-title" id="hostelDetailsTitle">Hostel Details</div>
+            <div id="hostelDetailsContent">
+                <!-- Content will be populated dynamically -->
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-secondary" onclick="closeModal()">Close</button>
+                <button class="btn-primary" onclick="contactOwner()">💬 Contact Owner</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Hostel Modal -->
+    <div class="modal" id="addHostelModal">
+        <div class="modal-content">
+            <div class="modal-title">Add New Hostel</div>
+            <div class="form-group">
+                <label>Hostel Name</label>
+                <input type="text" placeholder="Enter hostel name">
+            </div>
+            <div class="form-group">
+                <label>Address</label>
+                <textarea placeholder="Complete address" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Monthly Rent</label>
+                <input type="number" placeholder="Enter rent amount">
+            </div>
+            <div class="form-group">
+                <label>Total Rooms</label>
+                <input type="number" placeholder="Number of rooms">
+            </div>
+            <div class="form-group">
+                <label>Amenities</label>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+                    <label style="display: flex; align-items: center; gap: 4px;">
+                        <input type="checkbox"> WiFi
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 4px;">
+                        <input type="checkbox"> Food
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 4px;">
+                        <input type="checkbox"> AC
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 4px;">
+                        <input type="checkbox"> Laundry
+                    </label>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn-primary" onclick="saveHostel()">Save Hostel</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentUserType = 'tenant';
+        let currentHostel = '';
+        
+        function switchUserType(type) {
+            currentUserType = type;
+            
+            // Update toggle buttons
+            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Switch views
+            if (type === 'tenant') {
+                document.getElementById('tenantView').style.display = 'block';
+                document.getElementById('ownerView').style.display = 'none';
+                
+                // Update navigation for tenant
+                document.getElementById('nav-icon-1').textContent = '🔍';
+                document.getElementById('nav-label-1').textContent = 'Search';
+                document.getElementById('nav-icon-2').textContent = '📋';
+                document.getElementById('nav-label-2').textContent = 'Bookings';
+                document.getElementById('nav-icon-3').textContent = '❤️';
+                document.getElementById('nav-label-3').textContent = 'Favorites';
+                document.getElementById('nav-icon-4').textContent = '💬';
+                document.getElementById('nav-label-4').textContent = 'Chat';
+            } else {
+                document.getElementById('tenantView').style.display = 'none';
+                document.getElementById('ownerView').style.display = 'block';
+                
+                // Update navigation for owner
+                document.getElementById('nav-icon-1').textContent = '🏠';
+                document.getElementById('nav-label-1').textContent = 'Hostels';
+                document.getElementById('nav-icon-2').textContent = '📊';
+                document.getElementById('nav-label-2').textContent = 'Analytics';
+                document.getElementById('nav-icon-3').textContent = '💰';
+                document.getElementById('nav-label-3').textContent = 'Payments';
+                document.getElementById('nav-icon-4').textContent = '📢';
+                document.getElementById('nav-label-4').textContent = 'Announce';
+            }
+        }
+        
+        function searchHostels() {
+            const destination = document.getElementById('destination').value;
+            const checkin = document.getElementById('checkin').value;
+            const checkout = document.getElementById('checkout').value;
+            
+            if (!destination) {
+                alert('Please enter a destination to search');
+                return;
+            }
+            
+            alert(`🔍 Searching hostels in ${destination}\n\n📍 Found 15 hostels matching your criteria\n💰 Price range: ₹5,000 - ₹15,000\n📶 All with WiFi and basic amenities`);
+        }
+        
+        function filterBy(chip, filter) {
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            
+            const filterMessages = {
+                'all': 'Showing all hostels',
+                'wifi': 'Showing hostels with WiFi',
+                'food': 'Showing hostels with food facility',
+                'ac': 'Showing AC hostels',
+                'girls': 'Showing girls-only hostels',
+                'boys': 'Showing boys-only hostels'
+            };
+            
+            alert(filterMessages[filter]);
+        }
+        
+        function showHostelDetails(hostelName) {
+            const hostelDetails = {
+                'Green Backpackers': {
+                    description: '🏠 Modern hostel in the heart of Koramangala',
+                    amenities: ['📶 High-speed WiFi', '🍽️ 3 meals included', '❄️ AC rooms', '🧺 Laundry service', '🔒 24/7 Security'],
+                    rooms: ['Single occupancy: ₹12,000/month', 'Double sharing: ₹8,500/month', 'Triple sharing: ₹6,500/month'],
+                    contact: '📞 +91 98765 43210\n📧 owner@greenbackpackers.com',
+                    rules: ['No smoking inside', 'Visitors allowed till 10 PM', 'Monthly rent in advance']
+                }
+            };
+            
+            const details = hostelDetails[hostelName] || hostelDetails['Green Backpackers'];
+            
+            document.getElementById('hostelDetailsTitle').textContent = hostelName;
+            document.getElementById('hostelDetailsContent').innerHTML = `
+                <div style="margin-bottom: 16px;">
+                    <strong>About:</strong><br>
+                    ${details.description}
+                </div>
+                <div style="margin-bottom: 16px;">
+                    <strong>Amenities:</strong><br>
+                    ${details.amenities.join('<br>')}
+                </div>
+                <div style="margin-bottom: 16px;">
+                    <strong>Room Types & Pricing:</strong><br>
+                    ${details.rooms.join('<br>')}
+                </div>
+                <div style="margin-bottom: 16px;">
+                    <strong>Contact:</strong><br>
+                    ${details.contact}
+                </div>
+                <div style="margin-bottom: 16px;">
+                    <strong>House Rules:</strong><br>
+                    ${details.rules.join('<br>')}
+                </div>
+            `;
+            
+            document.getElementById('hostelDetailsModal').style.display = 'block';
+        }
+        
+        function showOnMap(hostelName) {
+            alert(`📍 Opening ${hostelName} location on Google Maps\n\n🗺️ Interactive map with:\n• Exact location\n• Nearby amenities\n• Public transport\n• Distance from colleges/offices`);
+        }
+        
+        function toggleFavorite(btn) {
+            if (btn.classList.contains('active')) {
+                btn.classList.remove('active');
+                btn.textContent = '♡';
+                alert('❤️ Removed from favorites');
+            } else {
+                btn.classList.add('active');
+                btn.textContent = '♥';
+                alert('❤️ Added to favorites');
+            }
+        }
+        
+        function bookHostel(hostelName) {
+            currentHostel = hostelName;
+            document.getElementById('bookingModal').style.display = 'block';
+        }
+        
+        function confirmBooking() {
+            const name = document.querySelector('#bookingModal input[type="text"]').value;
+            const email = document.querySelector('#bookingModal input[type="email"]').value;
+            const phone = document.querySelector('#bookingModal input[type="tel"]').value;
+            
+            if (!name || !email || !phone) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            alert(`✅ Booking Request Sent!\n\n🏠 Hostel: ${currentHostel}\n👤 Name: ${name}\n📧 Email: ${email}\n📱 Phone: ${phone}\n\n📋 Booking ID: HH${Math.floor(Math.random() * 10000)}\n\n💬 The hostel owner will contact you within 24 hours to confirm availability and arrange a visit.`);
+            closeModal();
+        }
+        
+        function contactOwner() {
+            alert('💬 Opening chat with hostel owner\n\n📱 You can now:\n• Send messages\n• Share documents\n• Schedule visits\n• Ask questions about facilities');
+            closeModal();
+        }
+        
+        // Owner Functions
+        function addNewHostel() {
+            document.getElementById('addHostelModal').style.display = 'block';
+        }
+        
+        function saveHostel() {
+            alert('🏠 New hostel added successfully!\n\n📸 Next steps:\n• Upload photos\n• Set availability calendar\n• Configure pricing\n• Publish listing');
+            closeModal();
+        }
+        
+        function manageHostel(hostelName) {
+            alert(`🏠 Managing ${hostelName}\n\n📊 Quick Stats:\n• 18/20 rooms occupied\n• ₹1.53L monthly revenue\n• 4.8⭐ rating\n• 3 pending inquiries\n\n⚙️ Management options:\n• View tenant details\n• Update pricing\n• Manage bookings\n• Send announcements`);
+        }
+        
+        function editHostel(hostelName) {
+            alert(`✏️ Editing ${hostelName}\n\n📝 You can update:\n• Photos and description\n• Pricing and availability\n• Amenities and rules\n• Contact information`);
+        }
+        
+        function replyToInquiry(tenantName) {
+            alert(`💬 Replying to ${tenantName}\n\n📱 Quick reply options:\n• "Yes, rooms available"\n• "Schedule a visit"\n• "Send pricing details"\n• "Custom message"`);
+        }
+        
+        function callTenant(tenantName) {
+            alert(`📞 Calling ${tenantName}...\n\n☎️ Features:\n• Direct call from app\n• Call history tracking\n• Follow-up reminders`);
+        }
+        
+        function showProfile() {
+            if (currentUserType === 'tenant') {
+                alert('👤 Tenant Profile\n\n📋 Your Details:\n• Name: Alex Johnson\n• Email: alex@example.com\n• Phone: +91 98765 43210\n• Verified: ✅\n\n📊 Activity:\n• 3 bookings completed\n• 5 reviews written\n• Member since Jan 2024');
+            } else {
+                alert('🏢 Owner Profile\n\n📋 Your Details:\n• Business: HostelHub Properties\n• Email: owner@hostelhub.com\n• Phone: +91 98765 43210\n• Verified: ✅\n\n📊 Business Stats:\n• 3 active hostels\n• 47 total tenants\n• ₹2.1L monthly revenue\n• 4.7⭐ average rating');
+            }
+        }
+        
+        function login() {
+            alert('✅ Login successful!\n\n🎉 Welcome back to HostelHub\n📱 All your data synced\n🔔 You have 2 new notifications');
+            closeModal();
+        }
+        
+        function loginWithGoogle() {
+            alert('🔍 Google Sign-In\n\n✅ Quick and secure login\n📱 Auto-sync your preferences\n🔒 Privacy protected');
+            closeModal();
+        }
+        
+        function loginWithOTP() {
+            alert('📱 OTP Login\n\n📲 Enter your phone number\n🔢 We\'ll send a 6-digit code\n⚡ Quick verification');
+        }
+        
+        function showRegister() {
+            alert('✨ Create Account\n\n📝 Registration options:\n• Email & Password\n• Phone & OTP\n• Google Sign-Up\n\n🎁 Welcome bonus: ₹500 off first booking!');
+        }
+        
+        function switchTab(tabElement, tabName) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            tabElement.classList.add('active');
+            
+            if (currentUserType === 'tenant') {
+                const tenantMessages = {
+                    'search': 'Search view active',
+                    'bookings': '📋 Your Bookings:\n\n🏠 Green Backpackers\n📅 March 15 - June 15\n💰 ₹8,500/month\n📍 Status: Confirmed\n\n🏢 Urban Nomads\n📅 July 1 - Dec 31\n💰 ₹12,000/month\n📍 Status: Pending',
+                    'favorites': '❤️ Your Favorites:\n\n🏠 Green Backpackers ⭐4.8\n🌅 Sunset Hostel ⭐4.9\n⛰️ Mountain Lodge ⭐4.7\n\n💡 Get notified when prices drop!',
+                    'chat': '💬 Your Conversations:\n\n🏠 Green Backpackers Owner\n💬 "Room available from next month"\n⏰ 2 hours ago\n\n🏢 Urban Nomads Owner\n💬 "Thanks for your interest"\n⏰ 1 day ago'
+                };
+                
+                if (tabName !== 'search') {
+                    setTimeout(() => alert(tenantMessages[tabName]), 100);
+                }
+            } else {
+                const ownerMessages = {
+                    'hostels': 'Hostels view active',
+                    'analytics': '📊 Analytics Dashboard:\n\n📈 This Month:\n• Revenue: ₹2.1L (+15%)\n• Occupancy: 94% (+8%)\n• New bookings: 12\n• Reviews: 4.7⭐ avg\n\n📅 Trends:\n• Peak season approaching\n• High demand for AC rooms',
+                    'payments': '💰 Payment Management:\n\n💳 This Month:\n• Collected: ₹1.95L\n• Pending: ₹15K\n• Overdue: ₹5K\n\n📊 Payment Methods:\n• Online: 85%\n• Cash: 15%\n\n🔔 3 payment reminders sent',
+                    'announce': '📢 Announcements:\n\n📝 Recent:\n• "WiFi upgrade completed"\n• "New laundry timings"\n• "Rent due reminder"\n\n✨ Create new:\n• Maintenance notice\n• Event announcement\n• Policy update'
+                };
+                
+                if (tabName !== 'hostels') {
+                    setTimeout(() => alert(ownerMessages[tabName]), 100);
+                }
+            }
+        }
+        
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        }
+        
+        // Set default dates
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const dayAfter = new Date(today);
+        dayAfter.setDate(dayAfter.getDate() + 3);
+        
+        document.getElementById('checkin').value = tomorrow.toISOString().split('T')[0];
+        document.getElementById('checkout').value = dayAfter.toISOString().split('T')[0];
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+        
+        // Show login modal on first visit
+        setTimeout(() => {
+            document.getElementById('loginModal').style.display = 'block';
+        }, 1000);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'969f2efb30dab2a3',t:'MTc1NDMyMjM0NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
